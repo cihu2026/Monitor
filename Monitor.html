@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 後慈湖｜即時人流監控系統</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --primary: #007bff;
+    --success: #28a745;
+    --danger: #dc3545;
+    --text: #333;
+    --limit: 500; /* 假設上限為 500 人 */
+  }
+
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+  .container { max-width: 800px; margin: 0 auto; }
+  
+  header { text-align: center; margin-bottom: 30px; }
+  h1 { margin: 0; color: #1a1a1a; font-weight: 900; }
+  .last-update { font-size: 14px; color: #666; margin-top: 5px; }
+
+  /* 數據大卡片 */
+  .main-card {
+    background: var(--card);
+    padding: 40px 20px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .label { font-size: 18px; font-weight: 700; color: #555; }
+  .count { font-size: 80px; font-weight: 900; color: var(--primary); margin: 10px 0; line-height: 1; }
+  
+  /* 進度條 */
+  .progress-container { width: 80%; height: 12px; background: #eee; border-radius: 10px; margin: 20px auto; overflow: hidden; }
+  .progress-bar { height: 100%; width: 0%; background: var(--success); transition: width 1s ease, background 0.3s; }
+
+  /* 次要資訊 */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+  .mini-card { background: var(--card); padding: 20px; border-radius: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
+  .mini-card div { font-size: 24px; font-weight: 700; margin-top: 5px; }
+
+  /* 最近紀錄列表 */
+  .log-container { background: var(--card); border-radius: 18px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+  h3 { margin-top: 0; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; }
+  .log-item { display: flex; justify-content: space-between; padding: 10px 5px; border-bottom: 1px solid #f9f9f9; font-size: 14px; }
+  .type-in { color: var(--success); font-weight: 700; }
+  .type-out { color: var(--danger); font-weight: 700; }
+
+  .refresh-btn { 
+    background: #333; color: white; border: none; padding: 10px 20px; 
+    border-radius: 50px; cursor: pointer; font-weight: 700; margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🌅 後慈湖人流監控</h1>
+    <div class="last-update" id="updateTime">最後更新：讀取中...</div>
+  </header>
+
+  <div class="main-card">
+    <div class="label">當前場內總人數</div>
+    <div class="count" id="currentCount">--</div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div id="statusText" style="font-weight: 700;">人流狀況：正常</div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="mini-card">
+      <span class="label">今日累計入園</span>
+      <div id="totalIn" style="color: var(--success);">--</div>
+    </div>
+    <div class="mini-card">
+      <span class="label">今日累計離園</span>
+      <div id="totalOut" style="color: var(--danger);">--</div>
+    </div>
+  </div>
+
+  <div class="log-container">
+    <h3>🕒 最近進出動態</h3>
+    <div id="logList">
+      <div style="text-align:center; color:#999; padding:20px;">載入紀錄中...</div>
+    </div>
+  </div>
+  
+  <p style="text-align:center; margin-top:30px;">
+    <button class="refresh-btn" onclick="refreshData()">🔄 立即刷新數據</button>
+  </p>
+</div>
+
+<script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbw5VQi-dtLodRQbKTgzueGGXgMBBedA_Th93Skr_Dia3-JYbxtd00shnZ24axbznDY/exec";
+  const MAX_CAPACITY = 500; // 場內人數上限
+
+  async function refreshData() {
+    try {
+      document.getElementById('updateTime').innerText = "⏳ 刷新中...";
+      
+      // 💡 這裡呼叫 GAS 的 getCount (或者你可以擴充 GAS 回傳更多資訊)
+      const res = await fetch(API_URL + "?action=getCount");
+      const data = await res.json();
+      
+      // 1. 更新主數字
+      const current = data.current || 0;
+      document.getElementById('currentCount').innerText = current;
+      
+      // 2. 更新進度條
+      const percent = Math.min((current / MAX_CAPACITY) * 100, 100);
+      const bar = document.getElementById('progressBar');
+      bar.style.width = percent + "%";
+      
+      // 3. 變色邏輯
+      if (percent > 80) {
+        bar.style.backgroundColor = "#dc3545"; // 紅色警告
+        document.getElementById('statusText').innerText = "⚠️ 人流擁擠：請暫停入園";
+        document.getElementById('statusText').style.color = "#dc3545";
+      } else {
+        bar.style.backgroundColor = "#28a745";
+        document.getElementById('statusText').innerText = "✅ 人流狀況：正常";
+        document.getElementById('statusText').style.color = "#28a745";
+      }
+
+      // 假設你的 GAS 有回傳累計數字 (如果沒有，可以從試算表抓)
+      document.getElementById('totalIn').innerText = data.totalIn || "--";
+      document.getElementById('totalOut').innerText = data.totalOut || "--";
+
+      // 更新紀錄 (這部分需配合 GAS 回傳最近 5-10 筆)
+      if (data.recentLogs) {
+        const logHtml = data.recentLogs.map(log => `
+          <div class="log-item">
+            <span>${log.time}</span>
+            <span class="${log.type === 'IN' ? 'type-in' : 'type-out'}">${log.type === 'IN' ? '📥 入園' : '📤 離園'}</span>
+            <span>${log.num} 人</span>
+          </div>
+        `).join('');
+        document.getElementById('logList').innerHTML = logHtml;
+      } else {
+         document.getElementById('logList').innerHTML = '<div style="text-align:center; color:#999; padding:10px;">(暫無即時明細)</div>';
+      }
+
+      document.getElementById('updateTime').innerText = "最後更新：" + new Date().toLocaleTimeString();
+      
+    } catch (e) {
+      console.error(e);
+      document.getElementById('updateTime').innerText = "❌ 讀取失敗，請檢查網路";
+    }
+  }
+
+  // 自動每 30 秒重新整理一次
+  setInterval(refreshData, 30000);
+  window.onload = refreshData;
+</script>
+
+</body>
+</html>
