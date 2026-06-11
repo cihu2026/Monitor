@@ -254,7 +254,22 @@
       }
 
       .stats-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .mini-card {
+        padding: 18px 12px;
+        border-radius: 22px;
+      }
+
+      .mini-card .label {
+        font-size: 12px;
+        letter-spacing: .08em;
+      }
+
+      .mini-num {
+        font-size: 32px;
       }
 
       .refresh-btn {
