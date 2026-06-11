@@ -37,7 +37,20 @@
       padding: 22px;
     }
 
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(148, 163, 184, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, .045) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.85), rgba(0,0,0,.15));
+    }
+
     .container {
+      position: relative;
       max-width: 960px;
       margin: 0 auto;
     }
@@ -107,7 +120,9 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(56,189,248,.15), transparent 45%);
+      background:
+        linear-gradient(135deg, rgba(56,189,248,.16), transparent 45%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.035), rgba(255,255,255,.035) 1px, transparent 1px, transparent 7px);
       pointer-events: none;
     }
 
@@ -121,12 +136,22 @@
 
     .count {
       position: relative;
-      margin: 12px 0 6px;
+      display: inline-block;
+      min-width: min(100%, 320px);
+      margin: 14px 0 8px;
+      padding: 8px 24px 12px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(2,6,23,.62), rgba(15,23,42,.28));
+      border: 1px solid rgba(56,189,248,.22);
       font-size: clamp(82px, 18vw, 150px);
       line-height: .95;
       font-weight: 900;
+      letter-spacing: .03em;
       color: var(--primary);
-      text-shadow: 0 0 34px rgba(56, 189, 248, .38);
+      text-shadow:
+        0 0 18px rgba(56, 189, 248, .72),
+        0 0 42px rgba(56, 189, 248, .34);
+      font-variant-numeric: tabular-nums;
     }
 
     .unit {
@@ -189,6 +214,8 @@
     }
 
     .mini-card {
+      position: relative;
+      overflow: hidden;
       padding: 22px;
       border-radius: 26px;
       background: rgba(15, 23, 42, .74);
@@ -198,18 +225,30 @@
       text-align: center;
     }
 
+    .mini-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(56,189,248,.12), transparent 45%);
+      pointer-events: none;
+    }
+
     .mini-num {
+      position: relative;
       margin-top: 8px;
       font-size: 40px;
       font-weight: 900;
+      font-variant-numeric: tabular-nums;
     }
 
     .in {
       color: var(--success);
+      text-shadow: 0 0 18px rgba(34,197,94,.28);
     }
 
     .out {
       color: var(--danger);
+      text-shadow: 0 0 18px rgba(239,68,68,.28);
     }
 
     .refresh-btn {
@@ -251,6 +290,12 @@
       .main-card {
         padding: 34px 18px;
         border-radius: 28px;
+      }
+
+      .count {
+        min-width: 0;
+        width: 100%;
+        padding: 8px 12px 12px;
       }
 
       .stats-grid {
@@ -318,12 +363,12 @@
 
     <section class="stats-grid">
       <div class="mini-card">
-        <div class="label">今日入園</div>
+        <div class="label">⬆ 今日入園</div>
         <div class="mini-num in" id="totalIn">--</div>
       </div>
 
       <div class="mini-card">
-        <div class="label">今日離園</div>
+        <div class="label">⬇ 今日離園</div>
         <div class="mini-num out" id="totalOut">--</div>
       </div>
     </section>
