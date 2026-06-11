@@ -1,181 +1,403 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📊 後慈湖｜即時人流監控</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #0f172a; /* 深藍底色，更有科技感 */
-            --card: #1e293b;
-            --primary: #38bdf8;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --text: #f8fafc;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>後慈湖｜即時人流監控</title>
 
-        body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-left: 5px solid var(--primary); padding-left: 15px; }
-        h1 { margin: 0; font-size: 24px; font-weight: 900; }
-        .last-update { font-size: 14px; color: #94a3b8; }
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-        /* 核心數字卡片 */
-        .main-card {
-            background: var(--card);
-            padding: 40px 20px;
-            border-radius: 24px;
-            text-align: center;
-            margin-bottom: 20px;
-            border: 1px solid #334155;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-        .label { font-size: 16px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .count { font-size: 100px; font-weight: 900; color: var(--primary); margin: 10px 0; text-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
-        
-        /* 進度條優化 */
-        .progress-box { width: 85%; margin: 20px auto; }
-        .progress-container { height: 16px; background: #334155; border-radius: 20px; overflow: hidden; margin-bottom: 10px; }
-        .progress-bar { height: 100%; width: 0%; background: var(--success); transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .capacity-info { display: flex; justify-content: space-between; font-size: 13px; color: #64748b; }
+  <style>
+    :root {
+      --bg1: #020617;
+      --bg2: #0f172a;
+      --card: rgba(15, 23, 42, 0.78);
+      --line: rgba(148, 163, 184, 0.22);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
 
-        /* 次要統計 */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .mini-card { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid #334155; text-align: center; }
-        .mini-num { font-size: 32px; font-weight: 900; margin-top: 5px; }
+    * {
+      box-sizing: border-box;
+    }
 
-        /* 按鈕 */
-        .refresh-btn { 
-            position: fixed; bottom: 30px; right: 30px; background: var(--primary); color: #000; 
-            border: none; width: 60px; height: 60px; border-radius: 50%; font-size: 24px;
-            cursor: pointer; box-shadow: 0 10px 15px rgba(0,0,0,0.3); transition: 0.3s;
-        }
-        .refresh-btn:hover { transform: rotate(180deg); }
-    </style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Noto Sans TC", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,.25), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(34,197,94,.18), transparent 35%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      padding: 22px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .title-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #38bdf8, #22c55e);
+      box-shadow: 0 12px 30px rgba(56, 189, 248, .28);
+      font-size: 26px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 5vw, 36px);
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+
+    .last-update {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .connection {
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, .8);
+      border: 1px solid var(--line);
+      color: var(--success);
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 0 10px 25px rgba(0,0,0,.18);
+    }
+
+    .main-card {
+      position: relative;
+      overflow: hidden;
+      padding: 38px 24px;
+      border-radius: 32px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, .38);
+      backdrop-filter: blur(18px);
+      text-align: center;
+    }
+
+    .main-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(56,189,248,.15), transparent 45%);
+      pointer-events: none;
+    }
+
+    .label {
+      position: relative;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: .16em;
+      font-size: 14px;
+    }
+
+    .count {
+      position: relative;
+      margin: 12px 0 6px;
+      font-size: clamp(82px, 18vw, 150px);
+      line-height: .95;
+      font-weight: 900;
+      color: var(--primary);
+      text-shadow: 0 0 34px rgba(56, 189, 248, .38);
+    }
+
+    .unit {
+      position: relative;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .progress-box {
+      position: relative;
+      width: min(100%, 720px);
+      margin: 0 auto;
+    }
+
+    .progress-container {
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(51, 65, 85, .9);
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, .18);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: var(--success);
+      transition: width 900ms ease, background-color 300ms ease;
+      box-shadow: 0 0 22px currentColor;
+    }
+
+    .capacity-info {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, .85);
+      border: 1px solid var(--line);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .mini-card {
+      padding: 22px;
+      border-radius: 26px;
+      background: rgba(15, 23, 42, .74);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, .25);
+      text-align: center;
+    }
+
+    .mini-num {
+      margin-top: 8px;
+      font-size: 40px;
+      font-weight: 900;
+    }
+
+    .in {
+      color: var(--success);
+    }
+
+    .out {
+      color: var(--danger);
+    }
+
+    .refresh-btn {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 64px;
+      height: 64px;
+      border: none;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #22c55e);
+      color: #020617;
+      font-size: 28px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 18px 36px rgba(0,0,0,.38);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .refresh-btn:hover {
+      transform: rotate(180deg) scale(1.06);
+      box-shadow: 0 24px 50px rgba(56,189,248,.3);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 16px;
+      }
+
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .connection {
+        align-self: flex-start;
+      }
+
+      .main-card {
+        padding: 34px 18px;
+        border-radius: 28px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .refresh-btn {
+        width: 58px;
+        height: 58px;
+        right: 18px;
+        bottom: 18px;
+      }
+    }
+  </style>
 </head>
-<body>
 
-<div class="container">
+<body>
+  <div class="container">
     <header>
+      <div class="title-block">
+        <div class="logo">⛰️</div>
         <div>
-            <h1>⛰️ 後慈湖</h1>
-            <div class="last-update" id="updateTime">系統連線中...</div>
+          <h1>後慈湖</h1>
+          <div class="last-update" id="updateTime">系統連線中...</div>
         </div>
-        <div id="connectionStatus" style="font-size: 12px; padding: 5px 12px; border-radius: 20px; background: #334155;">● 實時連線</div>
+      </div>
+
+      <div class="connection" id="connectionStatus">● 即時連線</div>
     </header>
 
-    <div class="main-card">
-        <div class="label">當前場內總人數</div>
-        <div class="count" id="currentCount">0</div>
-        
-        <div class="progress-box">
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            <div class="capacity-info">
-                <span>目前負荷</span>
-                <span id="capacityPercent">0%</span>
-                <span>上限 500 人</span>
-            </div>
-        </div>
-        <div id="statusText" style="margin-top:15px; font-weight:700;">狀態：讀取中...</div>
-    </div>
+    <section class="main-card">
+      <div class="label">目前場內總人數</div>
+      <div class="count" id="currentCount">0</div>
+      <div class="unit">人</div>
 
-    <div class="stats-grid">
-        <div class="mini-card">
-            <div class="label">今日入園</div>
-            <div class="mini-num" id="totalIn" style="color: var(--success);">--</div>
+      <div class="progress-box">
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
         </div>
-        <div class="mini-card">
-            <div class="label">今日離園</div>
-            <div class="mini-num" id="totalOut" style="color: var(--danger);">--</div>
+
+        <div class="capacity-info">
+          <span>目前負荷</span>
+          <span id="capacityPercent">0%</span>
+          <span>上限 500 人</span>
         </div>
-    </div>
-</div>
+      </div>
 
-<button class="refresh-btn" onclick="fetchData()">🔄</button>
+      <div class="status-pill" id="statusText">狀態：讀取中...</div>
+    </section>
 
-<script>
+    <section class="stats-grid">
+      <div class="mini-card">
+        <div class="label">今日入園</div>
+        <div class="mini-num in" id="totalIn">--</div>
+      </div>
+
+      <div class="mini-card">
+        <div class="label">今日離園</div>
+        <div class="mini-num out" id="totalOut">--</div>
+      </div>
+    </section>
+  </div>
+
+  <button class="refresh-btn" onclick="fetchData()" title="重新整理">↻</button>
+
+  <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbw5VQi-dtLodRQbKTgzueGGXgMBBedA_Th93Skr_Dia3-JYbxtd00shnZ24axbznDY/exec";
     const MAX_CAPACITY = 500;
 
     async function fetchData() {
-        const updateTimeEl = document.getElementById('updateTime');
-        const countEl = document.getElementById('currentCount');
-        const bar = document.getElementById('progressBar');
-        
-        try {
-            updateTimeEl.innerText = "⏳ 更新數據中...";
-            const res = await fetch(API_URL + "?action=getCount");
-            const data = await res.json();
-            
-            const current = data.current || 0;
-            
-            // 數字動畫 (簡單版)
-            animateValue("currentCount", parseInt(countEl.innerText) || 0, current, 1000);
-            
-            // 更新進度條
-            const percent = Math.floor((current / MAX_CAPACITY) * 100);
-            bar.style.width = Math.min(percent, 100) + "%";
-            document.getElementById('capacityPercent').innerText = percent + "%";
-            
-            // 變色與狀態邏輯
-            if (percent >= 90) {
-                bar.style.backgroundColor = "var(--danger)";
-                document.getElementById('statusText').innerText = "🚨 極度擁擠：立即停止進入";
-                document.getElementById('statusText').style.color = "var(--danger)";
-            } else if (percent >= 70) {
-                bar.style.backgroundColor = "var(--warning)";
-                document.getElementById('statusText').innerText = "⚠️ 人流較多：建議緩衝";
-                document.getElementById('statusText').style.color = "var(--warning)";
-            } else {
-                bar.style.backgroundColor = "var(--success)";
-                document.getElementById('statusText').innerText = "✅ 人流正常";
-                document.getElementById('statusText').style.color = "var(--success)";
-            }
+      const updateTimeEl = document.getElementById("updateTime");
+      const countEl = document.getElementById("currentCount");
+      const bar = document.getElementById("progressBar");
+      const statusText = document.getElementById("statusText");
+      const connectionStatus = document.getElementById("connectionStatus");
 
-            // 更新累計數字 (需 GAS 支援，若不支援則顯示目前的資料)
-            document.getElementById('totalIn').innerText = data.in || "--";
-            document.getElementById('totalOut').innerText = data.out || "--";
-            
-            updateTimeEl.innerText = "最後同步：" + new Date().toLocaleTimeString();
-            document.getElementById('connectionStatus').style.color = "var(--success)";
+      try {
+        updateTimeEl.innerText = "⏳ 更新數據中...";
+        connectionStatus.innerText = "● 連線中";
+        connectionStatus.style.color = "var(--primary)";
 
-        } catch (e) {
-            updateTimeEl.innerText = "❌ 斷開連線 (請檢查網路)";
-            document.getElementById('connectionStatus').style.color = "var(--danger)";
+        const res = await fetch(API_URL + "?action=getCount");
+        const data = await res.json();
+
+        const current = Number(data.current || 0);
+        const percent = Math.floor((current / MAX_CAPACITY) * 100);
+        const safePercent = Math.min(percent, 100);
+
+        animateValue("currentCount", Number(countEl.innerText) || 0, current, 800);
+
+        bar.style.width = safePercent + "%";
+        document.getElementById("capacityPercent").innerText = percent + "%";
+
+        if (percent >= 90) {
+          bar.style.backgroundColor = "var(--danger)";
+          statusText.innerText = "🚨 極度擁擠：立即停止進入";
+          statusText.style.color = "var(--danger)";
+        } else if (percent >= 70) {
+          bar.style.backgroundColor = "var(--warning)";
+          statusText.innerText = "⚠️ 人流較多：建議緩衝";
+          statusText.style.color = "var(--warning)";
+        } else {
+          bar.style.backgroundColor = "var(--success)";
+          statusText.innerText = "✅ 人流正常";
+          statusText.style.color = "var(--success)";
         }
+
+        document.getElementById("totalIn").innerText = data.in || "--";
+        document.getElementById("totalOut").innerText = data.out || "--";
+
+        updateTimeEl.innerText = "最後同步：" + new Date().toLocaleTimeString("zh-TW");
+        connectionStatus.innerText = "● 即時連線";
+        connectionStatus.style.color = "var(--success)";
+      } catch (e) {
+        updateTimeEl.innerText = "❌ 斷開連線，請檢查網路";
+        connectionStatus.innerText = "● 連線異常";
+        connectionStatus.style.color = "var(--danger)";
+      }
     }
 
-    // 數字跳動動畫效果
     function animateValue(id, start, end, duration) {
-        let obj = document.getElementById(id);
-        let range = end - start;
-        let minTimer = 50;
-        let stepTime = Math.abs(Math.floor(duration / range));
-        stepTime = Math.max(stepTime, minTimer);
-        let startTime = new Date().getTime();
-        let endTime = startTime + duration;
-        let timer;
+      const obj = document.getElementById(id);
 
-        function run() {
-            let now = new Date().getTime();
-            let remaining = Math.max((endTime - now) / duration, 0);
-            let value = Math.round(end - (remaining * range));
-            obj.innerText = value;
-            if (value == end) clearInterval(timer);
+      if (start === end) {
+        obj.innerText = end;
+        return;
+      }
+
+      const range = end - start;
+      const startTime = performance.now();
+
+      function update(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const value = Math.round(start + range * progress);
+
+        obj.innerText = value;
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
         }
-        timer = setInterval(run, stepTime);
-        run();
+      }
+
+      requestAnimationFrame(update);
     }
 
-    // 初始化與定時刷新
     window.onload = fetchData;
-    setInterval(fetchData, 30000); // 30秒更新一次
-</script>
-
+    setInterval(fetchData, 30000);
+  </script>
 </body>
 </html>
