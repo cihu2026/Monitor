@@ -1,173 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>後慈湖即時人流監控</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>📊 即時統計</title>
 
 <style>
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  padding:16px;
-  font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
-  background:#0f1f17;
-  color:white;
+* {
+  box-sizing: border-box;
 }
 
-.wrap{
-  width:100%;
-  max-width:430px;
-  margin:0 auto;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
 }
 
-.header{
-  text-align:center;
-  margin-bottom:18px;
+body {
+  font-family: "Noto Sans TC", Arial, "Microsoft JhengHei", sans-serif;
+  background: #0f1f17;
+  color: #fff;
+  text-align: center;
+  padding: 16px;
 }
 
-.logo{
-  font-size:18px;
-  letter-spacing:4px;
-  color:#b8e6d6;
+h2 {
+  margin: 8px 0 18px;
+  font-size: 26px;
+  line-height: 1.3;
 }
 
-.sub{
-  font-size:12px;
-  opacity:.75;
-  letter-spacing:2px;
+.card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 15px 0;
+  font-size: 24px;
 }
 
-h1{
-  font-size:28px;
-  margin:10px 0 6px;
+.big {
+  font-size: 56px;
+  line-height: 1.1;
+  font-weight: bold;
+  color: #00ff99;
+  margin-top: 10px;
+  word-break: break-all;
 }
 
-.desc{
-  font-size:14px;
-  opacity:.85;
+.small {
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.75;
+  margin-top: 8px;
 }
 
-.status{
-  margin-top:12px;
-  display:inline-block;
-  padding:8px 14px;
-  border-radius:999px;
-  background:rgba(255,255,255,.12);
-  font-size:14px;
+.footer {
+  margin-top: 18px;
+  font-size: 12px;
+  opacity: 0.55;
+  line-height: 1.6;
 }
 
-.card{
-  background:rgba(255,255,255,.05);
-  border-radius:16px;
-  padding:20px;
-  margin:15px 0;
-  box-shadow:0 8px 20px rgba(0,0,0,.18);
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  .card {
+    padding: 18px 14px;
+    font-size: 22px;
+  }
+
+  .big {
+    font-size: 52px;
+  }
 }
 
-.label{
-  font-size:15px;
-  opacity:.85;
-}
+@media (max-width: 360px) {
+  h2 {
+    font-size: 22px;
+  }
 
-.big{
-  font-size:82px;
-  line-height:1;
-  font-weight:900;
-  margin:12px 0;
-  color:#00ff99;
-}
+  .card {
+    font-size: 20px;
+  }
 
-.unit{
-  font-size:20px;
-  margin-left:4px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:12px;
-}
-
-.mini{
-  text-align:center;
-}
-
-.mini .num{
-  font-size:38px;
-  font-weight:800;
-  color:#00ff99;
-  margin-top:6px;
-}
-
-.note{
-  font-size:14px;
-  line-height:1.7;
-  opacity:.85;
-}
-
-.footer{
-  text-align:center;
-  font-size:12px;
-  opacity:.65;
-  padding:10px 0 20px;
-}
-
-@media(max-width:390px){
-  body{padding:12px}
-  h1{font-size:24px}
-  .big{font-size:68px}
-  .card{padding:16px}
+  .big {
+    font-size: 46px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="wrap">
+<h2>📊 即時統計（雲端版）</h2>
 
-  <div class="header">
-    <div class="logo">後慈湖</div>
-    <div class="sub">LIVE OPERATIONS BOARD</div>
-    <h1>即時人流監控</h1>
-    <div class="desc">入園、離園、場內人數</div>
-    <div class="status">● 即時連線｜手機版</div>
-  </div>
+<div class="card">
+  👥 現場人數
+  <div id="current" class="big">0</div>
+</div>
 
-  <div class="card">
-    <div class="label">目前場內總人數</div>
+<div class="card">
+  ⬆️ 入園人數
+  <div id="inCount" class="big">--</div>
+</div>
 
-    <div>
-      <span id="current" class="big">0</span>
-      <span class="unit">人</span>
-    </div>
+<div class="card">
+  ⬇️ 離園人數
+  <div id="outCount" class="big">--</div>
+</div>
 
-    <div id="state" class="note">狀態：讀取中...</div>
-  </div>
+<div class="small" id="status">狀態：讀取中...</div>
 
-  <div class="grid">
-    <div class="card mini">
-      <div class="label">今日入園</div>
-      <div id="inCount" class="num">--</div>
-    </div>
-
-    <div class="card mini">
-      <div class="label">今日離園</div>
-      <div id="outCount" class="num">--</div>
-    </div>
-  </div>
-
-  <div class="footer">
-    資料來源：後慈湖驗票／出園紀錄｜自動更新：30 秒
-  </div>
-
+<div class="footer">
+  資料來源：後慈湖驗票／出園紀錄｜自動更新：30 秒
 </div>
 
 <script>
 const API_URL = "";
 
-function updateUI(data){
+function updateUI(data) {
   const current = Number(data.current || 0);
   const inCount = data.inCount ?? "--";
   const outCount = data.outCount ?? "--";
@@ -175,30 +133,30 @@ function updateUI(data){
   document.getElementById("current").textContent = current;
   document.getElementById("inCount").textContent = inCount;
   document.getElementById("outCount").textContent = outCount;
-  document.getElementById("state").textContent = "狀態：正常";
+  document.getElementById("status").textContent = "狀態：正常";
 }
 
-async function loadData(){
-  if(!API_URL){
+async function loadData() {
+  if (!API_URL) {
     updateUI({
-      current:0,
-      inCount:"--",
-      outCount:"--"
+      current: 0,
+      inCount: "--",
+      outCount: "--"
     });
     return;
   }
 
-  try{
+  try {
     const res = await fetch(API_URL);
     const data = await res.json();
     updateUI(data);
-  }catch(e){
-    document.getElementById("state").textContent = "狀態：連線失敗";
+  } catch (e) {
+    document.getElementById("status").textContent = "狀態：連線失敗";
   }
 }
 
 loadData();
-setInterval(loadData,30000);
+setInterval(loadData, 30000);
 </script>
 
 </body>
