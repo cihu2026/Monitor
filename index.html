@@ -2,30 +2,29 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>後慈湖｜即時人流監控</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>後慈湖即時人流監控</title>
 
 <style>
 *{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
-  background:linear-gradient(160deg,#10251f,#17382f,#0b1714);
-  color:#fff;
-  min-height:100vh;
   padding:16px;
+  font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
+  background:#0f1f17;
+  color:white;
 }
 
 .wrap{
   width:100%;
-  max-width:480px;
-  margin:auto;
+  max-width:430px;
+  margin:0 auto;
 }
 
 .header{
   text-align:center;
-  margin-bottom:16px;
+  margin-bottom:18px;
 }
 
 .logo{
@@ -60,13 +59,11 @@ h1{
 }
 
 .card{
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:22px;
+  background:rgba(255,255,255,.05);
+  border-radius:16px;
   padding:20px;
-  margin-bottom:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.22);
-  backdrop-filter:blur(8px);
+  margin:15px 0;
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
 }
 
 .label{
@@ -79,37 +76,12 @@ h1{
   line-height:1;
   font-weight:900;
   margin:12px 0;
-  color:#9fffd4;
+  color:#00ff99;
 }
 
 .unit{
   font-size:20px;
   margin-left:4px;
-}
-
-.bar{
-  width:100%;
-  height:12px;
-  background:rgba(255,255,255,.16);
-  border-radius:999px;
-  overflow:hidden;
-  margin:12px 0;
-}
-
-.bar span{
-  display:block;
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#7dffc5,#ffe58a,#ff8f8f);
-  border-radius:999px;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  font-size:14px;
-  opacity:.9;
 }
 
 .grid{
@@ -123,15 +95,10 @@ h1{
 }
 
 .mini .num{
-  font-size:36px;
+  font-size:38px;
   font-weight:800;
-  color:#fff2a8;
+  color:#00ff99;
   margin-top:6px;
-}
-
-h2{
-  font-size:20px;
-  margin:0 0 10px;
 }
 
 .note{
@@ -147,37 +114,28 @@ h2{
   padding:10px 0 20px;
 }
 
-/* 平板與電腦 */
-@media (min-width:768px){
-  .wrap{max-width:900px}
-  .grid{grid-template-columns:repeat(3,1fr)}
-  h1{font-size:38px}
-  .big{font-size:110px}
-}
-
-/* 小手機 */
-@media (max-width:390px){
+@media(max-width:390px){
   body{padding:12px}
   h1{font-size:24px}
   .big{font-size:68px}
-  .card{padding:16px;border-radius:18px}
+  .card{padding:16px}
 }
 </style>
 </head>
 
 <body>
+
 <div class="wrap">
 
   <div class="header">
     <div class="logo">後慈湖</div>
     <div class="sub">LIVE OPERATIONS BOARD</div>
     <h1>即時人流監控</h1>
-    <div class="desc">入園、離園、場內人數與容量負荷</div>
-    <div class="status">● 即時連線　湖畔霧青｜手機版</div>
+    <div class="desc">入園、離園、場內人數</div>
+    <div class="status">● 即時連線｜手機版</div>
   </div>
 
   <div class="card">
-    <div class="label">系統連線中...</div>
     <div class="label">目前場內總人數</div>
 
     <div>
@@ -185,28 +143,7 @@ h2{
       <span class="unit">人</span>
     </div>
 
-    <div class="bar">
-      <span id="bar"></span>
-    </div>
-
-    <div class="row">
-      <span id="percent">目前負荷 0%</span>
-      <span>上限 200 人</span>
-    </div>
-
-    <div id="state" class="note" style="margin-top:10px;">狀態：讀取中...</div>
-  </div>
-
-  <div class="card">
-    <h2>營運判斷</h2>
-    <div id="judge" class="note">資料讀取中</div>
-    <div class="note">系統會依目前人數自動判斷是否需要分流或暫停入園。</div>
-  </div>
-
-  <div class="card">
-    <h2>容量設定</h2>
-    <div class="note"><b>200 人</b></div>
-    <div class="note">140 人以上提醒分流，180 人以上建議暫停入園。</div>
+    <div id="state" class="note">狀態：讀取中...</div>
   </div>
 
   <div class="grid">
@@ -219,57 +156,35 @@ h2{
       <div class="label">今日離園</div>
       <div id="outCount" class="num">--</div>
     </div>
-
-    <div class="card mini">
-      <div class="label">可再進入</div>
-      <div id="remain" class="num">--</div>
-    </div>
   </div>
 
   <div class="footer">
-    資料來源：後慈湖驗票／出園紀錄｜自動更新：30 秒 ↻
+    資料來源：後慈湖驗票／出園紀錄｜自動更新：30 秒
   </div>
 
 </div>
 
 <script>
-const MAX_CAPACITY = 200;
-
-/* 這裡之後如果要接 Google Apps Script，再把網址放進來 */
 const API_URL = "";
 
 function updateUI(data){
   const current = Number(data.current || 0);
   const inCount = data.inCount ?? "--";
   const outCount = data.outCount ?? "--";
-  const remain = Math.max(MAX_CAPACITY - current, 0);
-  const percent = Math.min(Math.round(current / MAX_CAPACITY * 100), 100);
 
   document.getElementById("current").textContent = current;
   document.getElementById("inCount").textContent = inCount;
   document.getElementById("outCount").textContent = outCount;
-  document.getElementById("remain").textContent = remain;
-  document.getElementById("percent").textContent = "目前負荷 " + percent + "%";
-  document.getElementById("bar").style.width = percent + "%";
-
-  let state = "正常";
-  let judge = "目前容量正常，可維持入園。";
-
-  if(current >= 180){
-    state = "建議暫停入園";
-    judge = "場內人數已接近上限，建議暫停入園或嚴格控管。";
-  }else if(current >= 140){
-    state = "提醒分流";
-    judge = "場內人數偏高，建議啟動分流與候補控管。";
-  }
-
-  document.getElementById("state").textContent = "狀態：" + state;
-  document.getElementById("judge").textContent = judge;
+  document.getElementById("state").textContent = "狀態：正常";
 }
 
 async function loadData(){
   if(!API_URL){
-    updateUI({current:0,inCount:"--",outCount:"--"});
+    updateUI({
+      current:0,
+      inCount:"--",
+      outCount:"--"
+    });
     return;
   }
 
