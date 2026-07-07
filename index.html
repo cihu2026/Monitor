@@ -1,55 +1,290 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0D6E73">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>後慈湖｜即時人流監控</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
 <style>
-:root{--ink:#17343a;--muted:#6f8588;--paper:#fffdf8;--mist:#eef6f3;--lake:#0D6E73;--lake2:#0B4D57;--pine:#1A7F5A;--gold:#B58A45;--amber:#B7791F;--rose:#C94B63;--line:#d9e8e4;--shadow:0 16px 40px rgba(15,79,95,.13)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{width:100%;min-height:100%;margin:0}body{height:100vh;overflow:hidden;padding:14px;font-family:"Noto Sans TC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 12% 8%,rgba(13,110,115,.13),transparent 30%),radial-gradient(circle at 92% 8%,rgba(181,138,69,.12),transparent 26%),linear-gradient(180deg,#f9fcfa,var(--mist))}.page{height:calc(100vh - 28px);max-width:1180px;margin:0 auto;display:grid;grid-template-rows:auto 1fr auto;gap:10px}.hero{position:relative;overflow:hidden;border-radius:26px;padding:16px 18px;background:linear-gradient(135deg,#0b4d57,#0d6e73 58%,#237f75);color:#fff;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;right:-80px;bottom:-110px;width:300px;height:210px;border-radius:50%;background:rgba(255,255,255,.12)}.hero-row{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:14px}.brand{display:flex;align-items:center;gap:12px}.seal{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);font-size:15px;font-weight:900;line-height:1.1}.kicker{margin:0 0 3px;color:#d9f3ef;font-size:11px;font-weight:900;letter-spacing:.18em}.title{margin:0;font-size:clamp(24px,4vw,40px);line-height:1.05;font-weight:900;letter-spacing:.04em}.subtitle{margin-top:5px;color:#dcefeb;font-size:13px;font-weight:700}.system{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);color:#fff;font-size:12px;font-weight:900;white-space:nowrap}.board{min-height:0;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.75fr);gap:10px}.card{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);backdrop-filter:blur(12px);overflow:hidden}.main{min-height:0;padding:18px 20px;text-align:center;display:flex;flex-direction:column;justify-content:center}.label{margin:0;color:var(--muted);font-size:13px;font-weight:900;letter-spacing:.15em}.count{display:block;margin:6px auto 2px;font-size:clamp(88px,17vw,184px);line-height:.86;font-weight:900;color:var(--lake2);font-variant-numeric:tabular-nums;letter-spacing:.01em}.unit{font-size:15px;color:var(--muted);font-weight:800}.barbox{width:min(100%,760px);margin:16px auto 0}.bar{height:16px;border-radius:999px;background:#edf4f2;border:1px solid var(--line);overflow:hidden}.bar-inner{height:100%;width:0;border-radius:999px;background:var(--pine);transition:width .8s ease,background-color .25s ease}.cap{display:flex;justify-content:space-between;gap:8px;margin-top:8px;color:var(--muted);font-size:12px;font-weight:800}.status{display:inline-flex;align-self:center;margin-top:14px;padding:10px 16px;border-radius:999px;background:#f7fbfa;border:1px solid var(--line);font-size:16px;font-weight:900;color:var(--pine)}.side{min-height:0;display:grid;grid-template-rows:1fr auto;gap:10px}.advice{padding:18px;display:flex;flex-direction:column;justify-content:center}.advice h2,.capacity h2{margin:0;color:var(--muted);font-size:12px;font-weight:900;letter-spacing:.14em}.advice-title{margin-top:10px;font-size:clamp(22px,3vw,31px);line-height:1.22;font-weight:900;color:var(--lake2)}.advice-desc{margin:9px 0 0;color:var(--muted);line-height:1.6;font-size:13px;font-weight:700}.capacity{padding:16px 18px;background:linear-gradient(180deg,#ffffff,#f8fbfa)}.capacity-line{display:flex;justify-content:space-between;align-items:flex-end;gap:8px}.capacity-num{font-size:30px;font-weight:900;color:var(--lake2)}.capacity-note{margin-top:7px;color:var(--muted);line-height:1.55;font-size:12px;font-weight:700}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{padding:14px 12px;text-align:center}.m-label{color:var(--muted);font-size:12px;font-weight:900;letter-spacing:.12em}.num{margin-top:4px;font-size:clamp(30px,5vw,46px);line-height:1;font-weight:900;font-variant-numeric:tabular-nums}.in{color:var(--pine)}.out{color:var(--rose)}.remain{color:var(--amber)}.footer{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:12px;font-weight:700}.refresh{width:46px;height:46px;border:0;border-radius:50%;background:linear-gradient(135deg,var(--lake),var(--lake2));color:#fff;font-size:22px;font-weight:900;box-shadow:0 12px 26px rgba(13,110,115,.24)}.refresh:active{transform:scale(.96) rotate(90deg)}@media(max-width:760px){body{height:auto;min-height:100vh;overflow:auto;padding:10px}.page{height:auto;min-height:calc(100vh - 20px);grid-template-rows:auto auto auto;gap:8px}.hero{border-radius:22px;padding:14px}.hero-row{align-items:flex-start;flex-direction:column}.system{justify-content:flex-start}.seal{width:45px;height:45px}.subtitle{font-size:12px}.board{grid-template-columns:1fr;gap:8px}.main{padding:16px 14px}.count{font-size:clamp(78px,28vw,132px)}.side{grid-template-rows:auto auto;gap:8px}.advice{padding:14px}.advice-title{font-size:22px}.advice-desc{font-size:12px}.capacity{padding:13px 14px}.metrics{gap:8px}.metric{padding:12px 8px;border-radius:20px}.m-label{font-size:11px}.num{font-size:32px}.footer{font-size:11px;padding-bottom:4px}.refresh{width:42px;height:42px}}@media(max-width:430px){.metrics{grid-template-columns:repeat(3,1fr)}.metric{padding:10px 5px}.num{font-size:28px}.cap{font-size:11px}.status{font-size:14px;padding:9px 12px}.capacity-line{display:block}.capacity-num{font-size:26px}}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
+  background:linear-gradient(160deg,#10251f,#17382f,#0b1714);
+  color:#fff;
+  min-height:100vh;
+  padding:16px;
+}
+
+.wrap{
+  width:100%;
+  max-width:480px;
+  margin:auto;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:16px;
+}
+
+.logo{
+  font-size:18px;
+  letter-spacing:4px;
+  color:#b8e6d6;
+}
+
+.sub{
+  font-size:12px;
+  opacity:.75;
+  letter-spacing:2px;
+}
+
+h1{
+  font-size:28px;
+  margin:10px 0 6px;
+}
+
+.desc{
+  font-size:14px;
+  opacity:.85;
+}
+
+.status{
+  margin-top:12px;
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  font-size:14px;
+}
+
+.card{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:22px;
+  padding:20px;
+  margin-bottom:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+  backdrop-filter:blur(8px);
+}
+
+.label{
+  font-size:15px;
+  opacity:.85;
+}
+
+.big{
+  font-size:82px;
+  line-height:1;
+  font-weight:900;
+  margin:12px 0;
+  color:#9fffd4;
+}
+
+.unit{
+  font-size:20px;
+  margin-left:4px;
+}
+
+.bar{
+  width:100%;
+  height:12px;
+  background:rgba(255,255,255,.16);
+  border-radius:999px;
+  overflow:hidden;
+  margin:12px 0;
+}
+
+.bar span{
+  display:block;
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#7dffc5,#ffe58a,#ff8f8f);
+  border-radius:999px;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-size:14px;
+  opacity:.9;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+
+.mini{
+  text-align:center;
+}
+
+.mini .num{
+  font-size:36px;
+  font-weight:800;
+  color:#fff2a8;
+  margin-top:6px;
+}
+
+h2{
+  font-size:20px;
+  margin:0 0 10px;
+}
+
+.note{
+  font-size:14px;
+  line-height:1.7;
+  opacity:.85;
+}
+
+.footer{
+  text-align:center;
+  font-size:12px;
+  opacity:.65;
+  padding:10px 0 20px;
+}
+
+/* 平板與電腦 */
+@media (min-width:768px){
+  .wrap{max-width:900px}
+  .grid{grid-template-columns:repeat(3,1fr)}
+  h1{font-size:38px}
+  .big{font-size:110px}
+}
+
+/* 小手機 */
+@media (max-width:390px){
+  body{padding:12px}
+  h1{font-size:24px}
+  .big{font-size:68px}
+  .card{padding:16px;border-radius:18px}
+}
 </style>
 </head>
+
 <body>
-<div class="page">
-  <section class="hero">
-    <div class="hero-row">
-      <div class="brand"><div class="seal">後慈湖</div><div><p class="kicker">LIVE OPERATIONS BOARD</p><h1 class="title">即時人流監控</h1><div class="subtitle">入園、離園、場內人數與容量負荷</div></div></div>
-      <div class="system"><div class="pill" id="connectionStatus">● 即時連線</div><div class="pill">湖畔霧青｜一頁式</div><div class="pill" id="updateTime">系統連線中...</div></div>
+<div class="wrap">
+
+  <div class="header">
+    <div class="logo">後慈湖</div>
+    <div class="sub">LIVE OPERATIONS BOARD</div>
+    <h1>即時人流監控</h1>
+    <div class="desc">入園、離園、場內人數與容量負荷</div>
+    <div class="status">● 即時連線　湖畔霧青｜手機版</div>
+  </div>
+
+  <div class="card">
+    <div class="label">系統連線中...</div>
+    <div class="label">目前場內總人數</div>
+
+    <div>
+      <span id="current" class="big">0</span>
+      <span class="unit">人</span>
     </div>
-  </section>
 
-  <section class="board">
-    <div class="card main">
-      <p class="label">目前場內總人數</p>
-      <span class="count" id="currentCount">0</span>
-      <div class="unit">人</div>
-      <div class="barbox"><div class="bar"><div class="bar-inner" id="progressBar"></div></div><div class="cap"><span>目前負荷</span><span id="capacityPercent">0%</span><span id="capacityMax">上限 200 人</span></div></div>
-      <div class="status" id="statusText">狀態：讀取中...</div>
+    <div class="bar">
+      <span id="bar"></span>
     </div>
-    <aside class="side">
-      <div class="card advice"><h2>營運判斷</h2><div class="advice-title" id="operationTitle">資料讀取中</div><p class="advice-desc" id="operationDesc">系統會依目前人數自動判斷是否需要分流或暫停入園。</p></div>
-      <div class="card capacity"><div class="capacity-line"><h2>容量設定</h2><div class="capacity-num">200 人</div></div><div class="capacity-note">140 人以上提醒分流，180 人以上建議暫停入園。</div></div>
-    </aside>
-  </section>
 
-  <section class="metrics">
-    <div class="card metric"><div class="m-label">今日入園</div><div class="num in" id="totalIn">--</div></div>
-    <div class="card metric"><div class="m-label">今日離園</div><div class="num out" id="totalOut">--</div></div>
-    <div class="card metric"><div class="m-label">可再進入</div><div class="num remain" id="remainCount">--</div></div>
-  </section>
+    <div class="row">
+      <span id="percent">目前負荷 0%</span>
+      <span>上限 200 人</span>
+    </div>
 
-  <div class="footer"><span>資料來源：後慈湖驗票／出園紀錄｜自動更新：30 秒</span><button class="refresh" onclick="fetchData()" title="重新整理">↻</button></div>
+    <div id="state" class="note" style="margin-top:10px;">狀態：讀取中...</div>
+  </div>
+
+  <div class="card">
+    <h2>營運判斷</h2>
+    <div id="judge" class="note">資料讀取中</div>
+    <div class="note">系統會依目前人數自動判斷是否需要分流或暫停入園。</div>
+  </div>
+
+  <div class="card">
+    <h2>容量設定</h2>
+    <div class="note"><b>200 人</b></div>
+    <div class="note">140 人以上提醒分流，180 人以上建議暫停入園。</div>
+  </div>
+
+  <div class="grid">
+    <div class="card mini">
+      <div class="label">今日入園</div>
+      <div id="inCount" class="num">--</div>
+    </div>
+
+    <div class="card mini">
+      <div class="label">今日離園</div>
+      <div id="outCount" class="num">--</div>
+    </div>
+
+    <div class="card mini">
+      <div class="label">可再進入</div>
+      <div id="remain" class="num">--</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    資料來源：後慈湖驗票／出園紀錄｜自動更新：30 秒 ↻
+  </div>
+
 </div>
+
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbw63eJnsg0a70IbZXBYWktt8CCDfx0mm_MAwzMRDoxKNNvcT2FTTMpJuU8f3qfqHjo/exec";
-const MAX_CAPACITY=200;
-function numberOrZero(v){const n=Number(v);return Number.isFinite(n)?n:0}
-function setText(id,text){document.getElementById(id).innerText=text}
-async function fetchData(){const updateTimeEl=document.getElementById("updateTime"),countEl=document.getElementById("currentCount"),bar=document.getElementById("progressBar"),statusText=document.getElementById("statusText"),connectionStatus=document.getElementById("connectionStatus");try{updateTimeEl.innerText="更新中...";connectionStatus.innerText="● 連線中";const res=await fetch(API_URL+"?action=getCount",{cache:"no-store"});const data=await res.json();const current=numberOrZero(data.current);const totalIn=numberOrZero(data.in);const totalOut=numberOrZero(data.out);const remain=Math.max(0,MAX_CAPACITY-current);const percent=Math.floor((current/MAX_CAPACITY)*100);const safePercent=Math.min(percent,100);animateValue("currentCount",numberOrZero(countEl.innerText),current,700);bar.style.width=safePercent+"%";setText("capacityPercent",percent+"%");setText("capacityMax","上限 "+MAX_CAPACITY+" 人");setText("totalIn",totalIn);setText("totalOut",totalOut);setText("remainCount",remain);if(percent>=90){bar.style.backgroundColor="var(--rose)";statusText.innerText="管制建議：暫停入園";statusText.style.color="var(--rose)";setText("operationTitle","建議暫停入園");setText("operationDesc","目前已達高負荷區間，建議現場先停止放行，待離園人數增加後再恢復入園。")}else if(percent>=70){bar.style.backgroundColor="var(--amber)";statusText.innerText="人流提醒：建議分流控管";statusText.style.color="var(--amber)";setText("operationTitle","建議分流控管");setText("operationDesc","目前人流較多，建議拉長入園節奏，避免 B 點與園區內部壅塞。") }else{bar.style.backgroundColor="var(--pine)";statusText.innerText="狀態正常：可維持入園";statusText.style.color="var(--pine)";setText("operationTitle","可維持正常入園");setText("operationDesc","目前場內人數仍在安全負荷內，可維持一般入園節奏。") }updateTimeEl.innerText="最後同步："+new Date().toLocaleTimeString("zh-TW",{hour12:false});connectionStatus.innerText="● 即時連線"}catch(e){console.error(e);updateTimeEl.innerText="連線異常";connectionStatus.innerText="● 連線異常";setText("operationTitle","資料暫時中斷");setText("operationDesc","請檢查現場網路或稍後重新整理。看板恢復連線後會自動更新。")}}
-function animateValue(id,start,end,duration){const obj=document.getElementById(id);if(start===end){obj.innerText=end;return}const range=end-start,startTime=performance.now();function update(now){const progress=Math.min((now-startTime)/duration,1);obj.innerText=Math.round(start+range*progress);if(progress<1)requestAnimationFrame(update)}requestAnimationFrame(update)}
-window.onload=fetchData;setInterval(fetchData,30000);
+const MAX_CAPACITY = 200;
+
+/* 這裡之後如果要接 Google Apps Script，再把網址放進來 */
+const API_URL = "";
+
+function updateUI(data){
+  const current = Number(data.current || 0);
+  const inCount = data.inCount ?? "--";
+  const outCount = data.outCount ?? "--";
+  const remain = Math.max(MAX_CAPACITY - current, 0);
+  const percent = Math.min(Math.round(current / MAX_CAPACITY * 100), 100);
+
+  document.getElementById("current").textContent = current;
+  document.getElementById("inCount").textContent = inCount;
+  document.getElementById("outCount").textContent = outCount;
+  document.getElementById("remain").textContent = remain;
+  document.getElementById("percent").textContent = "目前負荷 " + percent + "%";
+  document.getElementById("bar").style.width = percent + "%";
+
+  let state = "正常";
+  let judge = "目前容量正常，可維持入園。";
+
+  if(current >= 180){
+    state = "建議暫停入園";
+    judge = "場內人數已接近上限，建議暫停入園或嚴格控管。";
+  }else if(current >= 140){
+    state = "提醒分流";
+    judge = "場內人數偏高，建議啟動分流與候補控管。";
+  }
+
+  document.getElementById("state").textContent = "狀態：" + state;
+  document.getElementById("judge").textContent = judge;
+}
+
+async function loadData(){
+  if(!API_URL){
+    updateUI({current:0,inCount:"--",outCount:"--"});
+    return;
+  }
+
+  try{
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    updateUI(data);
+  }catch(e){
+    document.getElementById("state").textContent = "狀態：連線失敗";
+  }
+}
+
+loadData();
+setInterval(loadData,30000);
 </script>
+
 </body>
 </html>
