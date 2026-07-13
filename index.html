@@ -8,54 +8,15 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Iansui&display=swap');
 :root{--bg:#0b1d16;--bg2:#153427;--card:rgba(255,255,255,.075);--line:rgba(255,255,255,.12);--text:#f5fff9;--muted:#b8cfc2;--green:#69f0ae;--green2:#21c77a}
-*{box-sizing:border-box}
+*,*::before,*::after,html,body,button,input,select,textarea{box-sizing:border-box;font-family:"Iansui",sans-serif!important;font-synthesis:none!important}
 html,body{margin:0;padding:0;width:100%;min-height:100%}
-body{font-family:"Iansui","Noto Sans TC","Microsoft JhengHei",sans-serif;color:var(--text);text-align:center;padding:20px 16px 28px;background:radial-gradient(circle at 50% -10%,rgba(105,240,174,.16),transparent 38%),linear-gradient(160deg,var(--bg2),var(--bg) 55%,#07110d);min-height:100vh}
-.wrap{width:min(620px,100%);margin:0 auto}
-.header{margin:4px 0 20px}
-h2{margin:0;font-size:29px;line-height:1.35;letter-spacing:.05em;font-weight:400}
-.subtitle{margin-top:7px;font-size:13px;color:var(--muted);letter-spacing:.1em;font-weight:400}
-.card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.045));border:1px solid var(--line);border-radius:26px;padding:22px 18px;margin:13px 0;font-size:23px;font-weight:400;box-shadow:0 14px 34px rgba(0,0,0,.22);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.card:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,var(--green),var(--green2));opacity:.9}
-.label{display:flex;align-items:center;justify-content:center;gap:8px;color:#eafff2;letter-spacing:.03em}
-.big{font-family:"Noto Sans TC","Arial Rounded MT Bold","Microsoft JhengHei",sans-serif;font-size:66px;line-height:1;font-weight:900;color:var(--green);margin-top:13px;word-break:break-all;font-variant-numeric:tabular-nums;text-shadow:0 0 24px rgba(105,240,174,.18)}
-.small{display:inline-block;font-size:13px;line-height:1.6;color:var(--muted);margin-top:10px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);font-weight:400}
-.footer{margin-top:18px;font-size:12px;color:var(--muted);opacity:.72;line-height:1.7;letter-spacing:.03em}
-@media(max-width:480px){body{padding:14px 11px 24px}.header{margin-bottom:15px}h2{font-size:25px}.subtitle{font-size:12px}.card{padding:20px 14px;border-radius:23px;font-size:21px;margin:10px 0}.big{font-size:58px}.small{font-size:12px}}
-@media(max-width:360px){h2{font-size:23px}.card{font-size:19px}.big{font-size:51px}}
+body{color:var(--text);text-align:center;padding:20px 16px 28px;background:radial-gradient(circle at 50% -10%,rgba(105,240,174,.16),transparent 38%),linear-gradient(160deg,var(--bg2),var(--bg) 55%,#07110d);min-height:100vh}
+.wrap{width:min(620px,100%);margin:0 auto}.header{margin:4px 0 20px}h2{margin:0;font-size:29px;line-height:1.35;letter-spacing:.05em;font-weight:400}.subtitle{margin-top:7px;font-size:13px;color:var(--muted);letter-spacing:.1em;font-weight:400}.card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.045));border:1px solid var(--line);border-radius:26px;padding:22px 18px;margin:13px 0;font-size:23px;font-weight:400;box-shadow:0 14px 34px rgba(0,0,0,.22);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}.card:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,var(--green),var(--green2));opacity:.9}.label{display:flex;align-items:center;justify-content:center;gap:8px;color:#eafff2;letter-spacing:.03em}.big{font-size:66px;line-height:1;font-weight:400;color:var(--green);margin-top:13px;word-break:break-all;font-variant-numeric:tabular-nums;text-shadow:0 0 24px rgba(105,240,174,.18)}.small{display:inline-block;font-size:13px;line-height:1.6;color:var(--muted);margin-top:10px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);font-weight:400}.footer{margin-top:18px;font-size:12px;color:var(--muted);opacity:.72;line-height:1.7;letter-spacing:.03em}@media(max-width:480px){body{padding:14px 11px 24px}.header{margin-bottom:15px}h2{font-size:25px}.subtitle{font-size:12px}.card{padding:20px 14px;border-radius:23px;font-size:21px;margin:10px 0}.big{font-size:58px}.small{font-size:12px}}@media(max-width:360px){h2{font-size:23px}.card{font-size:19px}.big{font-size:51px}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="header">
-    <h2>📊 後慈湖即時統計</h2>
-    <div class="subtitle">HOUS CIHU LIVE MONITOR</div>
-  </div>
-
-  <div class="card">
-    <div class="label">👥 現場人數</div>
-    <div id="current" class="big">0</div>
-  </div>
-
-  <div class="card">
-    <div class="label">⬆️ 今日入園</div>
-    <div id="inCount" class="big">--</div>
-  </div>
-
-  <div class="card">
-    <div class="label">⬇️ 今日離園</div>
-    <div id="outCount" class="big">--</div>
-  </div>
-
-  <div class="small" id="status">狀態：讀取中...</div>
-  <div class="footer">資料來源：後慈湖驗票／出園紀錄<br>每 10 秒自動更新</div>
-</div>
+<div class="wrap"><div class="header"><h2>📊 後慈湖即時統計</h2><div class="subtitle">HOUS CIHU LIVE MONITOR</div></div><div class="card"><div class="label">👥 現場人數</div><div id="current" class="big">0</div></div><div class="card"><div class="label">⬆️ 今日入園</div><div id="inCount" class="big">--</div></div><div class="card"><div class="label">⬇️ 今日離園</div><div id="outCount" class="big">--</div></div><div class="small" id="status">狀態：讀取中...</div><div class="footer">資料來源：後慈湖驗票／出園紀錄<br>每 10 秒自動更新</div></div>
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbw5VQi-dtLodRQbKTgzueGGXgMBBedA_Th93Skr_Dia3-JYbxtd00shnZ24axbznDY/exec?action=getCount";
-function pick(o,keys,fallback){for(const k of keys){if(o&&o[k]!==undefined&&o[k]!==null)return o[k]}return fallback}
-function updateUI(result){const data=result&&result.data?result.data:result;const current=Number(pick(data,["current","currentPeople","currentCount"],0));const inCount=pick(data,["in","inCount","totalIn","inTotal"],0);const outCount=pick(data,["out","outCount","totalOut","outTotal"],0);document.getElementById("current").textContent=Number.isFinite(current)?current:0;document.getElementById("inCount").textContent=inCount;document.getElementById("outCount").textContent=outCount;document.getElementById("status").textContent="● 狀態正常｜"+new Date().toLocaleTimeString("zh-TW",{hour12:false})}
-async function loadData(){const status=document.getElementById("status");status.textContent="狀態：更新中...";try{const res=await fetch(API_URL+"&_="+Date.now(),{cache:"no-store"});if(!res.ok)throw new Error("HTTP "+res.status);updateUI(await res.json())}catch(e){console.error(e);status.textContent="狀態：連線失敗，10 秒後重試"}}
-loadData();setInterval(loadData,10000);
+const API_URL="https://script.google.com/macros/s/AKfycbw5VQi-dtLodRQbKTgzueGGXgMBBedA_Th93Skr_Dia3-JYbxtd00shnZ24axbznDY/exec?action=getCount";function pick(o,keys,fallback){for(const k of keys){if(o&&o[k]!==undefined&&o[k]!==null)return o[k]}return fallback}function updateUI(result){const data=result&&result.data?result.data:result;const current=Number(pick(data,["current","currentPeople","currentCount"],0));const inCount=pick(data,["in","inCount","totalIn","inTotal"],0);const outCount=pick(data,["out","outCount","totalOut","outTotal"],0);document.getElementById("current").textContent=Number.isFinite(current)?current:0;document.getElementById("inCount").textContent=inCount;document.getElementById("outCount").textContent=outCount;document.getElementById("status").textContent="● 狀態正常｜"+new Date().toLocaleTimeString("zh-TW",{hour12:false})}async function loadData(){const status=document.getElementById("status");status.textContent="狀態：更新中...";try{const res=await fetch(API_URL+"&_="+Date.now(),{cache:"no-store"});if(!res.ok)throw new Error("HTTP "+res.status);updateUI(await res.json())}catch(e){console.error(e);status.textContent="狀態：連線失敗，10 秒後重試"}}loadData();setInterval(loadData,10000);
 </script>
-</body>
-</html>
+</body></html>
