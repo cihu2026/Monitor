@@ -3,22 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b1d16">
 <title>📊 即時統計</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;padding:0;width:100%;min-height:100%}body{font-family:"Noto Sans TC",Arial,"Microsoft JhengHei",sans-serif;background:#0f1f17;color:#fff;text-align:center;padding:16px}h2{margin:8px 0 18px;font-size:26px;line-height:1.3}.card{background:rgba(255,255,255,.05);border-radius:16px;padding:20px;margin:15px 0;font-size:24px}.big{font-size:56px;line-height:1.1;font-weight:bold;color:#00ff99;margin-top:10px;word-break:break-all}.small{font-size:14px;line-height:1.6;opacity:.75;margin-top:8px}.footer{margin-top:18px;font-size:12px;opacity:.55;line-height:1.6}@media(max-width:480px){body{padding:12px}h2{font-size:24px}.card{padding:18px 14px;font-size:22px}.big{font-size:52px}}@media(max-width:360px){h2{font-size:22px}.card{font-size:20px}.big{font-size:46px}}
+:root{--bg:#0b1d16;--bg2:#153427;--card:rgba(255,255,255,.075);--line:rgba(255,255,255,.12);--text:#f5fff9;--muted:#b8cfc2;--green:#69f0ae;--green2:#21c77a}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;min-height:100%}
+body{font-family:"Noto Sans TC",Arial,"Microsoft JhengHei",sans-serif;color:var(--text);text-align:center;padding:20px 16px 28px;background:radial-gradient(circle at 50% -10%,rgba(105,240,174,.16),transparent 38%),linear-gradient(160deg,var(--bg2),var(--bg) 55%,#07110d);min-height:100vh}
+.wrap{width:min(620px,100%);margin:0 auto}
+.header{margin:4px 0 20px}
+h2{margin:0;font-size:28px;line-height:1.3;letter-spacing:.04em}
+.subtitle{margin-top:7px;font-size:13px;color:var(--muted);letter-spacing:.08em}
+.card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.045));border:1px solid var(--line);border-radius:22px;padding:22px 18px;margin:13px 0;font-size:22px;font-weight:750;box-shadow:0 14px 34px rgba(0,0,0,.22);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.card:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,var(--green),var(--green2));opacity:.9}
+.label{display:flex;align-items:center;justify-content:center;gap:8px;color:#eafff2}
+.big{font-size:64px;line-height:1;font-weight:900;color:var(--green);margin-top:13px;word-break:break-all;font-variant-numeric:tabular-nums;text-shadow:0 0 24px rgba(105,240,174,.18)}
+.small{display:inline-block;font-size:13px;line-height:1.6;color:var(--muted);margin-top:10px;padding:8px 13px;border-radius:999px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08)}
+.footer{margin-top:18px;font-size:12px;color:var(--muted);opacity:.72;line-height:1.7}
+@media(max-width:480px){body{padding:14px 11px 24px}.header{margin-bottom:15px}h2{font-size:24px}.subtitle{font-size:12px}.card{padding:20px 14px;border-radius:19px;font-size:20px;margin:10px 0}.big{font-size:56px}.small{font-size:12px}}
+@media(max-width:360px){h2{font-size:22px}.card{font-size:18px}.big{font-size:49px}}
 </style>
 </head>
 <body>
-<h2>📊 即時統計（雲端版）</h2>
-<div class="card">👥 現場人數<div id="current" class="big">0</div></div>
-<div class="card">⬆️ 入園人數<div id="inCount" class="big">--</div></div>
-<div class="card">⬇️ 離園人數<div id="outCount" class="big">--</div></div>
-<div class="small" id="status">狀態：讀取中...</div>
-<div class="footer">資料來源：後慈湖驗票／出園紀錄｜自動更新：30 秒</div>
+<div class="wrap">
+  <div class="header">
+    <h2>📊 後慈湖即時統計</h2>
+    <div class="subtitle">HOUS CIHU LIVE MONITOR</div>
+  </div>
+
+  <div class="card">
+    <div class="label">👥 現場人數</div>
+    <div id="current" class="big">0</div>
+  </div>
+
+  <div class="card">
+    <div class="label">⬆️ 今日入園</div>
+    <div id="inCount" class="big">--</div>
+  </div>
+
+  <div class="card">
+    <div class="label">⬇️ 今日離園</div>
+    <div id="outCount" class="big">--</div>
+  </div>
+
+  <div class="small" id="status">狀態：讀取中...</div>
+  <div class="footer">資料來源：後慈湖驗票／出園紀錄<br>每 30 秒自動更新</div>
+</div>
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbw5VQi-dtLodRQbKTgzueGGXgMBBedA_Th93Skr_Dia3-JYbxtd00shnZ24axbznDY/exec?action=getCount";
 function pick(o,keys,fallback){for(const k of keys){if(o&&o[k]!==undefined&&o[k]!==null)return o[k]}return fallback}
-function updateUI(result){const data=result&&result.data?result.data:result;const current=Number(pick(data,["current","currentPeople","currentCount"],0));const inCount=pick(data,["in","inCount","totalIn","inTotal"],0);const outCount=pick(data,["out","outCount","totalOut","outTotal"],0);document.getElementById("current").textContent=Number.isFinite(current)?current:0;document.getElementById("inCount").textContent=inCount;document.getElementById("outCount").textContent=outCount;document.getElementById("status").textContent="狀態：正常｜更新時間："+new Date().toLocaleTimeString("zh-TW",{hour12:false})}
+function updateUI(result){const data=result&&result.data?result.data:result;const current=Number(pick(data,["current","currentPeople","currentCount"],0));const inCount=pick(data,["in","inCount","totalIn","inTotal"],0);const outCount=pick(data,["out","outCount","totalOut","outTotal"],0);document.getElementById("current").textContent=Number.isFinite(current)?current:0;document.getElementById("inCount").textContent=inCount;document.getElementById("outCount").textContent=outCount;document.getElementById("status").textContent="● 狀態正常｜"+new Date().toLocaleTimeString("zh-TW",{hour12:false})}
 async function loadData(){const status=document.getElementById("status");status.textContent="狀態：更新中...";try{const res=await fetch(API_URL+"&_="+Date.now(),{cache:"no-store"});if(!res.ok)throw new Error("HTTP "+res.status);updateUI(await res.json())}catch(e){console.error(e);status.textContent="狀態：連線失敗，30 秒後重試"}}
 loadData();setInterval(loadData,30000);
 </script>
