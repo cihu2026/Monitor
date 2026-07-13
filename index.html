@@ -123,35 +123,52 @@ h2 {
 </div>
 
 <script>
-const API_URL = "";
+const API_URL = "https://script.google.com/macros/s/AKfycbw63eJnsg0a70IbZXBYWktt8CCDfx0mm_MAwzMRDoxKNNvcT2FTTMpJuU8f3qfqHjo/exec?action=getRealtimeStatus";
 
-function updateUI(data) {
-  const current = Number(data.current || 0);
-  const inCount = data.inCount ?? "--";
-  const outCount = data.outCount ?? "--";
+function firstValue(object, keys, fallback) {
+  for (const key of keys) {
+    if (object && object[key] !== undefined && object[key] !== null) {
+      return object[key];
+    }
+  }
+  return fallback;
+}
 
-  document.getElementById("current").textContent = current;
+function updateUI(result) {
+  const data = result && result.data ? result.data : result;
+
+  const current = Number(firstValue(data, ["current", "currentPeople", "currentCount"], 0));
+  const inCount = firstValue(data, ["inCount", "totalIn", "inTotal"], 0);
+  const outCount = firstValue(data, ["outCount", "totalOut", "outTotal"], 0);
+
+  document.getElementById("current").textContent = Number.isFinite(current) ? current : 0;
   document.getElementById("inCount").textContent = inCount;
   document.getElementById("outCount").textContent = outCount;
-  document.getElementById("status").textContent = "狀態：正常";
+  document.getElementById("status").textContent =
+    "狀態：正常｜更新時間：" +
+    new Date().toLocaleTimeString("zh-TW", { hour12: false });
 }
 
 async function loadData() {
-  if (!API_URL) {
-    updateUI({
-      current: 0,
-      inCount: "--",
-      outCount: "--"
-    });
-    return;
-  }
+  const status = document.getElementById("status");
+  status.textContent = "狀態：更新中...";
 
   try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    updateUI(data);
+    const separator = API_URL.includes("?") ? "&" : "?";
+    const res = await fetch(API_URL + separator + "_=" + Date.now(), {
+      method: "GET",
+      cache: "no-store"
+    });
+
+    if (!res.ok) {
+      throw new Error("HTTP " + res.status);
+    }
+
+    const result = await res.json();
+    updateUI(result);
   } catch (e) {
-    document.getElementById("status").textContent = "狀態：連線失敗";
+    console.error("讀取即時資料失敗：", e);
+    status.textContent = "狀態：連線失敗，30 秒後重試";
   }
 }
 
