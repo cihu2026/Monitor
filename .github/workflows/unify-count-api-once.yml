@@ -1,0 +1,29 @@
+name: Unify count API once
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/unify-count-api-once.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - shell: python
+        run: |
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          old='https://script.google.com/macros/s/AKfycbw5VQi-dtLodRQbKTgzueGGXgMBBedA_Th93Skr_Dia3-JYbxtd00shnZ24axbznDY/exec'
+          new='https://script.google.com/macros/s/AKfycbw63eJnsg0a70IbZXBYWktt8CCDfx0mm_MAwzMRDoxKNNvcT2FTTMpJuU8f3qfqHjo/exec'
+          if old not in s:
+              raise SystemExit('Old Monitor API URL not found; no change made')
+          p.write_text(s.replace(old,new,1),encoding='utf-8')
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/unify-count-api-once.yml
+          git add index.html
+          git commit -m "Use the same count API as ticket scan and exit control"
+          git push
